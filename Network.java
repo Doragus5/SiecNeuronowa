@@ -20,6 +20,7 @@ public class Network {
 
     public final int inputSize;
     public final int innerLayers;
+    private int numberOfTests = 0;
 
     private static final DoubleUnaryOperator sigmoid = (double x) -> {
         return 1.0 / (1.0 + Math.exp(-x));
@@ -126,6 +127,7 @@ public class Network {
             calculateWeightDerivatives(i);
             calculateBiasDerivatives(i);
         }
+        numberOfTests++;
     }
 
     private void calculateActivationDerivatives(int layer) {
@@ -152,6 +154,19 @@ public class Network {
     private void calculateBiasDerivatives(int layer) {
         biasDerivatives[layer] = weightedSumDerivatives[layer];
         biasCummulativeDerivatives[layer] = biasCummulativeDerivatives[layer].add(biasDerivatives[layer]);
+    }
+
+    public void backpropagate() {
+        if(numberOfTests == 0) return;
+        for (int i = 1; i < innerLayers + 1; i++) {
+            biases[i] = biases[i].add(biasCummulativeDerivatives[i].multiply(1 / (2 * numberOfTests)));
+            biasCummulativeDerivatives[i] = biasCummulativeDerivatives[i].multiply(1 / 2);
+        }
+        for (int i = 1; i < innerLayers; i++) {
+            weights[i] = weights[i].add(weightCummulativeDerivatives[i].multiply(1 / (2 * numberOfTests)));
+            weightCummulativeDerivatives[i] = weightCummulativeDerivatives[i].multiply(1 / 2);
+        }
+        numberOfTests /= 2;
     }
     
     
