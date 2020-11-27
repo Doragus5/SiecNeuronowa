@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 
-public class uczacaSieSiec {
+public class UczacaSieSiec {
     public static void main(String[] args) {
         double[][] tab1 = { { 2, 1 }, { 2, 3 }, { 3, 0 } };
         double[][] tab2 = { { 1, 0 }, { 2, 3 } };
@@ -37,7 +37,6 @@ public class uczacaSieSiec {
             Path path2 = Paths.get("name");
             path = path.resolve(path2);
             network.saveAs("siec1");
-            // java.nio.file.Files;
             Files.createDirectories(path);
 
             System.out.println(path.toString() + " is created!");
