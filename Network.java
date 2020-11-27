@@ -1,6 +1,12 @@
 import java.util.Random;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 //import java.io.*;
@@ -71,6 +77,7 @@ public class Network {
             activations[i] = new Matrix(innerLayers[i - 1]);
             biases[i] = new Matrix(innerLayers[i - 1]);
             biases[i].applyFunction(initializeBias);
+            weightedSums[i] = new Matrix(innerLayers[i - 1]);
         }
         for (int i = 1; i < innerLayers.length; i++) {
             weights[i] = new Matrix(innerLayers[i - 1], innerLayers[i]);
@@ -169,5 +176,23 @@ public class Network {
         numberOfTests /= 2;
     }
     
+    public void saveAs(String name) throws FileAlreadyExistsException, IOException {
+        Path path = Paths.get(name);
+        //if (Files.exists(path))
+        //    throw new FileAlreadyExistsException(name);
+        Files.createDirectory(path);
+        saveMatrixes(path, "biases", biases);
+    }
     
+    private static void saveMatrixes(Path path, String matrixName, Matrix[] matrixes)throws IOException {
+        path = path.resolve(matrixName);
+        Files.createDirectory(path);
+        Path currentPath = path;
+        for (int i = 0; i < matrixes.length; i++){
+            currentPath = path.resolve(Integer.toString(i) + ".txt");
+            File file = currentPath.toFile();
+            file.createNewFile();
+            matrixes[i].printMatrix(file);
+        }
+    }
 }

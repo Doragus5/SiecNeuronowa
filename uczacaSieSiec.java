@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 
 public class uczacaSieSiec {
@@ -6,8 +10,8 @@ public class uczacaSieSiec {
         double[][] tab2 = { { 1, 0 }, { 2, 3 } };
         Matrix ma1 = new Matrix(tab1);
         Matrix ma2 = new Matrix(tab2);
-        // int[] il = {2, 3};
-        //Network network = new Network(il, 1, 1);
+        int[] il = {2, 3};
+        Network network = new Network(il, 1, 1);
         Random random1 = new Random();
         Random random2 = new Random();
         System.out.println(random1.nextGaussian());
@@ -27,7 +31,22 @@ public class uczacaSieSiec {
         (ma1.multiply(1, ma2)).printMatrix();
         System.out.println();
         (ma1.multiply(1, ma2)).transpose().printMatrix();
+        try {
 
+            Path path = Paths.get("test");
+            Path path2 = Paths.get("name");
+            path = path.resolve(path2);
+            network.saveAs("siec1");
+            // java.nio.file.Files;
+            Files.createDirectories(path);
+
+            System.out.println(path.toString() + " is created!");
+
+        } catch (IOException e) {
+
+            System.err.println("Failed to create directory!" + e.getMessage());
+
+        }
     }
 
 }
